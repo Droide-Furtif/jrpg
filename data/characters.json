@@ -1,0 +1,78 @@
+[{
+	"id": 1,
+	"name": "Dryad",
+	"filename": "Dryad.png",
+	"baseStats": {
+		"hp": 48,
+		"mana": 23,
+		"atk": 6,
+		"wisdom": 3
+	},
+	"spells": {
+	}
+},
+{
+	"id": 2,
+	"name": "Vasti",
+	"filename": "Vasti.png",
+	"baseStats": {
+		"hp": 60,
+		"mana": 14,
+		"atk": 10,
+		"wisdom": 1
+	},
+	"spells": {
+	}
+},
+{
+	"id": 3,
+	"name": "Death Knight Michael",
+	"filename": "DeathKnight_Michael.png",
+	"baseStats": {
+		"hp": 100,
+		"mana": 30,
+		"atk": 10,
+		"wisdom": 5
+	},
+	"spells": {
+	}
+},
+{
+	"id": 4,
+	"name": "Ancient Priestess",
+	"filename": "Ancient_Priestess.png",
+	"baseStats": {
+		"hp": 55,
+		"mana": 18,
+		"atk": 7,
+		"wisdom": 4
+	},
+	"spells": {
+	}
+},
+{
+	"id": 5,
+	"name": "Ireza",
+	"filename": "Ireza.png",
+	"baseStats": {
+		"hp": 52,
+		"mana": 15,
+		"atk": 8,
+		"wisdom": 4
+	},
+	"spells": {
+	}
+},
+{
+	"id": 6,
+	"name": "Naruto",
+	"filename": "Naruto.png",
+	"baseStats": {
+		"hp": 60,
+		"mana": 18,
+		"atk": 7,
+		"wisdom": 4
+	},
+	"spells": {
+	}
+}]
