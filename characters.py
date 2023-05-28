@@ -44,9 +44,9 @@ class Character:
         if bossSize: self.size = (550,450)
         # Scales images while keeping the same width-height ratio, Height is shared for everyone (250 or size[1])
         # while Width is changed depending on how much Height was changed
-        sprite_size = (self.img.get_width() * (self.size[1]/self.img.get_height()), self.size[1])
-        self.img = pygame.transform.scale(self.img, sprite_size)
-        self.draw_offset = (self.size[0] - sprite_size[0])/2
+        self.sprite_size = (self.img.get_width() * (self.size[1]/self.img.get_height()), self.size[1])
+        self.img = pygame.transform.scale(self.img, self.sprite_size)
+        self.draw_offset = (self.size[0] - self.sprite_size[0])/2
         if ally:
             self.pos = positions_list[Character.allyCount]
             Character.allyCount += 1

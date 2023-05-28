@@ -1,6 +1,7 @@
 import pygame
 from typing import List, Tuple
 from characters import Positions, positions_list
+from settings import *
 
 class BattlePointerArrow():
     def __init__(self, pos: List):
@@ -8,7 +9,7 @@ class BattlePointerArrow():
         self.img = pygame.transform.scale(self.img_unscaled, (36,44))
         self.pos_list = pos
         self.current_pos_index = 0
-        self.offset = (150, -50)
+        self.offset = (142, -53)
 
     def setPos(self, pos: Tuple[int]):
         if pos not in self.pos_list:
@@ -26,7 +27,7 @@ class BattlePointerArrow():
     def getPosWithOffset(self):
         if self.current_pos_index >= len(self.pos_list):
             self.current_pos_index = 0
-            self.offset = (150, -50)
+            self.offset = (142, -53)
         # Adds together the values of the pos tuple and the offset tuple into another tuple before returning it
         res = tuple(map(lambda i, j: i + j, self.pos_list[self.current_pos_index], self.offset))
         return res
@@ -44,5 +45,5 @@ class BattlePointerArrow():
     # Modifies offset values if the cursor is pointing the boss (to compensate for bigger sprite)
     def checkIfOnBossPos(self):
         if self.pos_list[self.current_pos_index] == positions_list[Positions.ENEMY_BOSS.value]:
-            self.offset = (265, -50)
-        else: self.offset = (150, -50)
+            self.offset = (265, -53)
+        else: self.offset = (142, -53)

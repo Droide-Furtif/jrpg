@@ -12,6 +12,8 @@ class Game:
         self.clock = pygame.time.Clock()
         self.FPS = 30
 
+        self.debug_mode = False
+
         # Load characters data from json
         with open("data/characters.json", "r") as f:
             self.characters_data = json.load(f)
@@ -19,7 +21,7 @@ class Game:
 
         # Team arguments requires the character's name OR id as in the json file - ex. "Ancient Priestess" or 4
         # Both teams need a list as argument, except for a boss. ["Ancient Priestess"] pour un seul non-boss
-        self.battle = Battle(self, ["Vasti", "Dryad","Ireza"], 3)
+        self.battle = Battle(self, ["Vasti", "Dryad","Ireza"], [3,4,6])
 
         # Keys variables
         self.escapeKeyDown = False
@@ -59,6 +61,8 @@ class Game:
                     self.INPUT_Space()
                 if event.key == pygame.K_RIGHT:
                     self.INPUT_Right()
+                if event.key == pygame.K_DOLLAR:
+                    self.INPUT_DollarSign()
             if event.type == pygame.KEYUP:
                 keys = pygame.key.get_pressed()
 
@@ -69,3 +73,7 @@ class Game:
 
     def INPUT_Right(self):
         self.battle.pointer_arrow.advanceToNextPos()
+
+    def INPUT_DollarSign(self):
+        self.debug_mode = not self.debug_mode
+        print("DEBUG")

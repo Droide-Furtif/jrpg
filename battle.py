@@ -30,9 +30,15 @@ class Battle:
         for c in self.allyTeam:
             self.GAME.screen.blit(c.getSprite(), (c.getPos()))
             self.GAME.screen.blit(c.getHpBarSurface(), ((c.getPos()[0] -c.getOffset(), c.getPos()[1] + c.img.get_height()+12)))
+            if self.GAME.debug_mode:
+                rect = pygame.Rect(c.getPos()[0], c.getPos()[1], c.getSprite().get_width(), c.getSprite().get_height())
+                pygame.draw.rect(self.GAME.screen, 'red', rect, 5)
         for c in self.enemyTeam:
             self.GAME.screen.blit(c.getSprite(), (c.getPos()))
             self.GAME.screen.blit(c.getHpBarSurface(), ((c.getPos()[0] -c.getOffset(), c.getPos()[1] + c.img.get_height()+12)))
+            if self.GAME.debug_mode:
+                rect = pygame.Rect(c.getPos()[0], c.getPos()[1], c.getSprite().get_width(), c.getSprite().get_height())
+                pygame.draw.rect(self.GAME.screen, 'red', rect, 5)
 
         # Draws pointer arrow
         self.GAME.screen.blit(self.pointer_arrow.getImg(), self.pointer_arrow.getPosWithOffset())
