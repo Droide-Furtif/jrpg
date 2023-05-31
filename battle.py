@@ -20,7 +20,12 @@ class Battle:
         self.generateTeams(allies, enemies)
 
         # Creates pointer arrow ui
-        self.pointer_arrow = BattlePointerArrow(Character.updated_positions_list)
+        self.pointer_arrow = BattlePointerArrow(self)
+
+        self.turn_counter = 1
+        self.state = "selecting_ally"
+        self.attacker = None
+        self.defender = None
 
 
     def draw(self):
@@ -28,20 +33,25 @@ class Battle:
         self.GAME.screen.blit(self.background_image, (0, 0))
         # Draw char sprite and health bar below
         for c in self.allyTeam:
-            self.GAME.screen.blit(c.getSprite(), (c.getPos()))
-            self.GAME.screen.blit(c.getHpBarSurface(), ((c.getPos()[0] -c.getOffset(), c.getPos()[1] + c.img.get_height()+12)))
+            self.GAME.screen.blit(c.getSprite(), (c.getRect()))
+            self.GAME.screen.blit(c.getHpBarSurface(), c.getHpBarRect())
             if self.GAME.debug_mode:
                 rect = pygame.Rect(c.getPos()[0], c.getPos()[1], c.getSprite().get_width(), c.getSprite().get_height())
                 pygame.draw.rect(self.GAME.screen, 'red', rect, 5)
         for c in self.enemyTeam:
-            self.GAME.screen.blit(c.getSprite(), (c.getPos()))
-            self.GAME.screen.blit(c.getHpBarSurface(), ((c.getPos()[0] -c.getOffset(), c.getPos()[1] + c.img.get_height()+12)))
+            self.GAME.screen.blit(c.getSprite(), (c.getRect()))
+            self.GAME.screen.blit(c.getHpBarSurface(), c.getHpBarRect())
             if self.GAME.debug_mode:
                 rect = pygame.Rect(c.getPos()[0], c.getPos()[1], c.getSprite().get_width(), c.getSprite().get_height())
                 pygame.draw.rect(self.GAME.screen, 'red', rect, 5)
 
         # Draws pointer arrow
-        self.GAME.screen.blit(self.pointer_arrow.getImg(), self.pointer_arrow.getPosWithOffset())
+        if not self.state == "enemy_turn":
+            self.GAME.screen.blit(self.pointer_arrow.getImg(), self.pointer_arrow.getPosWithOffset())
+
+        if self.GAME.debug_mode:
+            for p in positions_list:
+                pygame.draw.rect(self.GAME.screen, 'red', pygame.Rect(p[0],p[1], 5,5))
 
     # Generates teams lists from arguments and using Game's characters data
     def generateTeams(self, allies, enemies):
@@ -50,43 +60,61 @@ class Battle:
             # Loops over every character data from json until finding one with matching name(str) or id(int)
             for c in self.char_data:
                 if name == c["name"] or name == c["id"]:
-                    char = Character(c["filename"], True)
-            self.allyTeam.append(char)
+                    char = Character(c["filename"], c["size"], True)
+                    self.allyTeam.append(char)
 
         # Enemy is a boss if argument isn't a list
         if isinstance(enemies, str) or isinstance(enemies, int):
             for c in self.char_data:
                 if enemies == c["name"] or enemies == c["id"]:
-                    char = Character(c["filename"], False, True)
-            self.enemyTeam.append(char)
+                    char = Character(c["filename"], c["size"], False, True)
+                    self.enemyTeam.append(char)
         else:
             for name in enemies:
                 char = None
                 for c in self.char_data:
                     if name == c["name"] or name == c["id"]:
-                        char = Character(c["filename"], False)
-                self.enemyTeam.append(char)
+                        char = Character(c["filename"], c["size"], False)
+                        self.enemyTeam.append(char)
 
         self.battlers_list = self.allyTeam + self.enemyTeam
 
     def damageCharacter(self, char, dmg: int):
         char.takeDamage(dmg)
-        if not char.isDead():
-            return
-        self.battlers_list.remove(char)
-        if char.ally == True:
-            self.allyTeam.remove(char)
-        if char.ally == False:
-            self.enemyTeam.remove(char)
+        self.checkForDeaths()
 
 
     def damageTeam(self, team, dmg: int):
         for c in team:
             self.damageCharacter(c, dmg)
 
+    def checkForDeaths(self):
+        for char in self.battlers_list:
+            if char.isDead():
+                self.battlers_list.remove(char)
+                if char.ally == True:
+                    self.allyTeam.remove(char)
+                if char.ally == False:
+                    self.enemyTeam.remove(char)
 
     def update(self):
         pass
+
+    def nextActionState(self):
+        if self.state == "selecting_ally":
+            self.attacker = self.getTargetedCharacter()
+            self.pointer_arrow.max_len = len(self.battlers_list)
+            self.state = "selecting_enemy"
+        elif self.state == "selecting_enemy":
+            self.defender = self.getTargetedCharacter()
+            self.attacker.attackOther(self.defender)
+            self.checkForDeaths()
+            self.state = "enemy_turn"
+        elif self.state == "enemy_turn":
+            self.damageTeam(self.allyTeam, 5)
+            self.pointer_arrow.max_len = len(self.allyTeam)
+            self.state = "selecting_ally"
+
 
     def getTargetedCharacter(self):
         return self.battlers_list[self.pointer_arrow.getPosIndex()]

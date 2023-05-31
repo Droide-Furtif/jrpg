@@ -1,15 +1,18 @@
 import pygame
 from typing import List, Tuple
-from characters import Positions, positions_list
+from characters import *
 from settings import *
 
 class BattlePointerArrow():
-    def __init__(self, pos: List):
+    def __init__(self, battle):
+        self.BATTLE = battle
         self.img_unscaled = pygame.image.load("images/ui/arrow_blue.png").convert_alpha()
         self.img = pygame.transform.scale(self.img_unscaled, (36,44))
-        self.pos_list = pos
+        self.pos_list = Character.updated_positions_list
         self.current_pos_index = 0
-        self.offset = (142, -53)
+        self.base_offset = (0, -200)
+        self.offset = self.base_offset
+        self.max_len = len(self.BATTLE.allyTeam)
 
     def setPos(self, pos: Tuple[int]):
         if pos not in self.pos_list:
@@ -27,7 +30,7 @@ class BattlePointerArrow():
     def getPosWithOffset(self):
         if self.current_pos_index >= len(self.pos_list):
             self.current_pos_index = 0
-            self.offset = (142, -53)
+            self.offset = self.base_offset
         # Adds together the values of the pos tuple and the offset tuple into another tuple before returning it
         res = tuple(map(lambda i, j: i + j, self.pos_list[self.current_pos_index], self.offset))
         return res
@@ -35,7 +38,7 @@ class BattlePointerArrow():
 
     def advanceToNextPos(self):
         self.current_pos_index += 1
-        if self.current_pos_index >= len(self.pos_list):
+        if self.current_pos_index >= self.max_len:
             self.current_pos_index = 0
         self.checkIfOnBossPos()
 
@@ -46,4 +49,4 @@ class BattlePointerArrow():
     def checkIfOnBossPos(self):
         if self.pos_list[self.current_pos_index] == positions_list[Positions.ENEMY_BOSS.value]:
             self.offset = (265, -53)
-        else: self.offset = (142, -53)
+        else: self.offset = self.base_offset

@@ -11,37 +11,30 @@ class Positions(Enum):
     ENEMY_TOP = 4
     ENEMY_BOTTOM = 5
     ENEMY_BOSS = 6
-'''
+
 positions_list = [
-    (465, 390),
-    (150, 150),
-    (150, 580),
-    (1155, 390),
-    (1470, 150),
-    (1470, 580),
-    (1350, 250)
+    (630, 525),
+    (300, 300),
+    (300, 730),
+    (1290, 525),
+    (1620, 300),
+    (1620, 730),
+    (1415, 530)
 ]
-'''
-positions_list = [
-    (round(SCREEN_WIDTH/4.13), round(SCREEN_HEIGHT/2.77)),
-    (round(SCREEN_WIDTH/12.8), round(SCREEN_HEIGHT/7.2)),
-    (round(SCREEN_WIDTH/12.8), round(SCREEN_HEIGHT/1.86)),
-    (1155, 390),
-    (1470, 150),
-    (1470, 580),
-    (1250, 250)
-]
+
+# In order: Small, Medium, Big, Boss
+size_list = [(150,125), (300,250), (360,300), (550,450)]
 
 class Character:
     allyCount = 0
     enemyCount = 3
     updated_positions_list = []
 
-    def __init__(self, imgpath: str, ally= True , bossSize = False):
+    def __init__(self, imgpath: str, size = "medium", ally= True , bossSize = False):
         self.img = pygame.image.load("images/characters/"+imgpath).convert_alpha()
         self.ally = ally
-        self.size = (300, 250)
-        if bossSize: self.size = (550,450)
+        self.size = self.findSize(size)
+        if bossSize: self.size = size_list[3]
         # Scales images while keeping the same width-height ratio, Height is shared for everyone (250 or size[1])
         # while Width is changed depending on how much Height was changed
         self.sprite_size = (self.img.get_width() * (self.size[1]/self.img.get_height()), self.size[1])
@@ -59,16 +52,20 @@ class Character:
 
         self.maxHp = 200
         self.hp = self.maxHp
+        self.atk = 80
         self.out_of_combat = False
         self.hpBarSurface = self.createHpBarSurface()
+        self.rect = self.img.get_rect(center=self.pos)
 
 
+    def getRect(self):
+        return self.rect
 
     def getSprite(self):
         return self.img
 
     def getPos(self):
-        return (self.pos[0] + self.draw_offset, self.pos[1])
+        return self.pos[0] + self.draw_offset, self.pos[1]
 
     def createHpBarSurface(self):
         # Creates a pygame surface to draw the hpBar on
@@ -83,10 +80,16 @@ class Character:
     def getHpBarSurface(self):
         return self.createHpBarSurface()
 
+    def getHpBarRect(self):
+        return self.hpBarSurface.get_rect(midtop = (self.rect.midbottom[0], self.rect.midbottom[1] + 15))
+
     def takeDamage(self, dmg: int):
         self.hp -= dmg
         if self.hp <= 0:
             self.die()
+
+    def attackOther(self, defender):
+        defender.takeDamage(self.atk)
 
     def die(self):
         Character.updated_positions_list.remove(self.pos)
@@ -98,3 +101,17 @@ class Character:
 
     def getOffset(self):
         return self.draw_offset
+
+    def findSize(self, size_str):
+
+        if size_str == "small":
+            return size_list[0]
+        elif size_str == "medium":
+            return size_list[1]
+        elif size_str == "big":
+            return size_list[2]
+        elif size_str == "boss":
+            return size_list[3]
+        else:
+            print(f"wrong size parameter for {self}")
+            return size_list[1]

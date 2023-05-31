@@ -2,6 +2,7 @@
 	"id": 1,
 	"name": "Dryad",
 	"filename": "Dryad.png",
+	"size": "medium",
 	"baseStats": {
 		"hp": 48,
 		"mana": 23,
@@ -15,6 +16,7 @@
 	"id": 2,
 	"name": "Vasti",
 	"filename": "Vasti.png",
+	"size": "medium",
 	"baseStats": {
 		"hp": 60,
 		"mana": 14,
@@ -28,6 +30,7 @@
 	"id": 3,
 	"name": "Death Knight Michael",
 	"filename": "DeathKnight_Michael.png",
+	"size": "medium",
 	"baseStats": {
 		"hp": 100,
 		"mana": 30,
@@ -41,6 +44,7 @@
 	"id": 4,
 	"name": "Ancient Priestess",
 	"filename": "Ancient_Priestess.png",
+	"size": "medium",
 	"baseStats": {
 		"hp": 55,
 		"mana": 18,
@@ -54,6 +58,7 @@
 	"id": 5,
 	"name": "Ireza",
 	"filename": "Ireza.png",
+	"size": "medium",
 	"baseStats": {
 		"hp": 52,
 		"mana": 15,
@@ -67,11 +72,54 @@
 	"id": 6,
 	"name": "Naruto",
 	"filename": "Naruto.png",
+	"size": "boss",
 	"baseStats": {
 		"hp": 60,
 		"mana": 18,
 		"atk": 7,
 		"wisdom": 4
+	},
+	"spells": {
+	}
+},
+{
+	"id": 7,
+	"name": "Smol Dark Slime",
+	"filename": "Slime_Darki.png",
+	"size": "small",
+	"baseStats": {
+		"hp": 10,
+		"mana": 0,
+		"atk": 5,
+		"wisdom": 2
+	},
+	"spells": {
+	}
+},
+{
+	"id": 8,
+	"name": "Dark Slime",
+	"filename": "Slime_Darkii.png",
+	"size": "medium",
+	"baseStats": {
+		"hp": 25,
+		"mana": 0,
+		"atk": 8,
+		"wisdom": 4
+	},
+	"spells": {
+	}
+},
+{
+	"id": 9,
+	"name": "Big Dark Slime",
+	"filename": "Slime_Darkiii.png",
+	"size": "big",
+	"baseStats": {
+		"hp": 60,
+		"mana": 15,
+		"atk": 15,
+		"wisdom": 10
 	},
 	"spells": {
 	}

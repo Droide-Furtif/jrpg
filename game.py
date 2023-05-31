@@ -21,7 +21,7 @@ class Game:
 
         # Team arguments requires the character's name OR id as in the json file - ex. "Ancient Priestess" or 4
         # Both teams need a list as argument, except for a boss. ["Ancient Priestess"] pour un seul non-boss
-        self.battle = Battle(self, ["Vasti", "Dryad","Ireza"], [3,4,6])
+        self.battle = Battle(self, ["Vasti", "Dryad","Ireza"], [9,8,7])
 
         # Keys variables
         self.escapeKeyDown = False
@@ -68,7 +68,8 @@ class Game:
 
     def INPUT_Space(self):
         # Damages character pointed by the arrow
-        self.battle.damageCharacter(self.battle.getTargetedCharacter(),10)
+        self.battle.nextActionState()
+        #self.battle.damageCharacter(self.battle.getTargetedCharacter(),10)
         #self.battle.damageTeam(self.battle.enemyTeam, 60)
 
     def INPUT_Right(self):
